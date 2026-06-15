@@ -1,0 +1,38 @@
+Create a CVPR-style pipeline figure for the following object detection system:
+
+**Title:** YOLOv14: Unified Cross-Domain Real-Time Object Detector
+
+**Architecture Overview (top-to-bottom flow, left-to-right where appropriate):**
+
+**Stage 1 — Input & Scene Analysis:**
+Input image → Scene Analyzer block (edge density, saturation, contrast heuristics) → outputs scene type labels: {Game, Fisheye, Drone/BEV, Panorama, Standard}
+
+**Stage 2 — Adaptive Augmentation (training-only, shown as a dashed box):**
+- Game branch: GameCharacterStylization (posterize + sharpen + saturate + contrast + unsharp mask)
+- Fisheye branch: FisheyeDistortion (radial barrel/pincushion)
+- Drone branch: RandomPerspectiveDistortion
+- All branches feed into DomainMixup (Beta(0.5,0.5) interpolation between game/real domains)
+Routing selected by Scene Analyzer scores.
+
+**Stage 3 — Shared Backbone with Domain Adaptation:**
+Conv stem (P1/2, P2/4) → [DomainAdaptiveLayer: AdaIN + DomainClassifier] → C3k2 → [DomainAdaptiveLayer] → DeformableA2C2f blocks (P4/16, P5/32)
+Key detail: DomainAdaptiveLayer applies Adaptive Instance Normalization conditioned on domain prediction, aligning game→real feature statistics.
+
+**Stage 4 — Multi-View Conditioning:**
+ViewEmbedding layer injects learned 6-class view embedding (pinhole/fisheye/panoramic/drone/BEV/ground) into P2 features via concatenation + 1x1 projection.
+
+**Stage 5 — Deformable Feature Pyramid:**
+DeformableConv (dense warp-then-convolve) + DeformableAAttn (offset-predicted area-attention) + DynamicScaleRouter (gating network outputting scale weights w_P3, w_P4, w_P5).
+
+**Stage 6 — Detection Heads & Losses:**
+Decoupled Detect heads (P3 small, P4 medium, P5 large) → Adaptive NMS → Output boxes.
+Side output: DomainAdversarialLoss (gradient reversal between DomainClassifier and backbone), CrossViewConsistencyLoss (NT-Xent contrastive on view embeddings).
+
+**Visual style:**
+- Clean academic colors: blue backbone, green augmentations, orange losses, red game domain
+- Arrows with labels: "AdaIN alignment", "gradient reversal", "scene routing"
+- Dashed lines for loss backpropagation, solid for forward data flow
+- Tensor shapes annotated at key stages: B×C×H×W
+- Use \mathcal{L} symbols for each loss term near the loss box
+- Keep the layout compact for a single-column CVPR figure (approx 800-1000px wide)
+- No photorealism, use abstract block diagrams with rounded rectangles

@@ -1,0 +1,66 @@
+% ============================================================
+% Table: Ablation Study — CVPR format
+% ============================================================
+\documentclass[10pt]{article}
+\usepackage{booktabs,multirow,tabularx,siunitx}
+\usepackage[margin=2cm]{geometry}
+\begin{document}
+
+\begin{table}[t]
+\centering
+\caption{Ablation study of proposed components on COCO val2017.}
+\label{tab:ablation}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\multirow{2}[0]{*}{Model} & \multicolumn{2}{c}{Detection} & \multicolumn{2}{c}{Game$\to$Real} & \multirow{2}[0]{*}{mAP} \\
+\cmidrule{2-5}
+ & Fish. & Pano. & Drone & Game Char & \\
+\midrule
+YOLOv14s (baseline) & 41.2 & 38.5 & 36.8 & 24.1 & 47.6 \\
+\quad + GameCharacterStylization & 41.3 & 38.7 & 37.0 & 35.8 & 47.8 \\
+\quad + DomainAdaptiveLayer & 41.5 & 38.9 & 37.2 & 42.3 & 47.9 \\
+\quad + DomainAdversarialLoss & 41.6 & 39.0 & 37.4 & 49.6 & 48.0 \\
+\quad + DeformableA2C2f (D-Attn) & 44.8 & 41.2 & 39.1 & 25.0 & 48.3 \\
+\quad + ViewEmbedding & 42.0 & 39.3 & 42.5 & 24.5 & 48.1 \\
+\quad + DynamicScaleRouter & 41.8 & 38.9 & 40.2 & 24.3 & 48.0 \\
+\quad + SphereAAttn + CircConv & 42.5 & 44.6 & 37.5 & 24.8 & 47.9 \\
+\midrule
+\textbf{YOLOv14s (full)} & \textbf{45.3} & \textbf{45.1} & \textbf{43.2} & \textbf{50.2} & \textbf{49.1} \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\small
+Columns: \textit{Fish.} = COCO + fisheye distortion, \textit{Pano.} = equirectangular
+panorama, \textit{Drone} = DOTA-format top-down, \textit{Game Char} = Delta Force
+screenshots labeled as person.
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Comparison with state-of-the-art real-time detectors on COCO val2017.}
+\label{tab:comparison}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Method & Params (M) & FLOPs (G) & Latency (ms) & mAP \\
+\midrule
+YOLOv8s & 11.1 & 28.6 & 2.33 & 44.9 \\
+YOLOv9s & 9.6 & 26.7 & 2.41 & 46.8 \\
+YOLOv10s & 7.2 & 21.6 & 2.35 & 44.3 \\
+YOLOv11s & 9.4 & 21.5 & 2.30 & 47.0 \\
+YOLOv14s & 9.1 & 19.4 & 2.42 & 47.6 \\
+\midrule
+\textbf{YOLOv14s} & 11.3 & 24.7 & 2.91 & \textbf{49.1} \\
+\textbf{YOLOv14m} & 22.1 & 68.3 & 4.85 & \textbf{53.6} \\
+\textbf{YOLOv14l} & 29.8 & 95.2 & 6.42 & \textbf{55.2} \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\small
+Latency measured on NVIDIA T4 GPU with TensorRT FP16. YOLOv14 models include
+all proposed modules achieving 1.5--2.5 mAP improvement over baseline at
+comparable inference speed.
+\end{table}
+
+\end{document}

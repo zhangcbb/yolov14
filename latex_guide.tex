@@ -1,0 +1,51 @@
+% ============================================================
+% LaTeX Figure/Table Compilation Guide for CVPR Paper
+% All files in: yolo/
+% ============================================================
+\documentclass[10pt]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\begin{document}
+
+\section*{How to Compile}
+
+All figures use TikZ. Compile on Overleaf or locally:
+
+\begin{verbatim}
+# Pipeline diagram (Fig. 1)
+pdflatex pipeline_tikz.tex
+
+# Domain adaptation effect (Fig. 2)
+pdflatex fig_domain_adapt.tex
+
+# Ablation + comparison tables (Table 1, 2)
+pdflatex table_ablation.tex
+\end{verbatim}
+
+On Overleaf, select XeLaTeX as compiler.
+
+\section*{Files}
+\begin{tabular}{ll}
+\toprule
+File & Purpose \\
+\midrule
+\texttt{pipeline.png} & Pre-generated pipeline figure (from prompt) \\
+\texttt{pipeline\_tikz.tex} & TikZ source for Fig. 1 (pipeline) \\
+\texttt{fig\_domain\_adapt.tex} & TikZ source for Fig. 2 (domain alignment) \\
+\texttt{table\_ablation.tex} & Ablation + comparison tables \\
+\texttt{pipeline\_prompt.txt} & Text prompt for AI image generation \\
+\bottomrule
+\end{tabular}
+
+\section*{Suggested Figure Placement in Paper}
+
+\begin{enumerate}
+  \item \textbf{Fig. 1} (pipeline\_tikz.tex) --- System overview, in Introduction or Method section.
+  \item \textbf{Fig. 2} (fig\_domain\_adapt.tex) --- Domain adaptation feature visualization, in Method section after 3.2.
+  \item \textbf{Table 1} (table\_ablation.tex) --- Ablation study, in Experiments.
+  \item \textbf{Table 2} (table\_ablation.tex) --- SOTA comparison, in Experiments.
+\end{enumerate}
+
+\end{document}
